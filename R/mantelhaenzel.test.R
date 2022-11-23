@@ -1,21 +1,17 @@
-# Function to perform the Cochran–Mantel–Haenszel test on an array of multiple 2x2 tables
-# Returns the common odds ratio (sample estimate), CMH chi-squared test statistic, and associated p-value
-
-#' Cochran–Mantel–Haenszel Chi-Squared Test for 2x2xk Tables.
+#' Cochran–Mantel–Haenszel Chi-Squared Test for a 2x2xk Table.
 #'
-#' Performs the Cochran–Mantel–Haenszel chi-squared test on a 2x2xk table, which tests the null hypothesis that the common odds ratio is 1 and the alternative that it is non-zero.
+#' Performs the Cochran–Mantel–Haenszel chi-squared test without a continuity correction on a 2x2xk table, testing the null hypothesis that the common odds ratio is 1 and the alternative that it is non-zero.
 #'
 #' @param x A 3 dimensional 2x2xk table/array of 2x2 tables.
 #'
-#' @return A named vector including the common odds ratio, chi-squared statistic, and p-value from the test.
+#' @return A list including the common odds ratio, chi-squared statistic, and p-value from the test.
 #'
-#' @example
+#' @examples
 #' a <- array(c(1,3,5,6,
 #'              2,7,3,1,
 #'              2,4,9,2),
 #'            dim = c(2,2,3))
 #' mantelhaenzel.test(a)
-#'
 #' @export
 mantelhaenzel.test <- function(x){
 
@@ -58,10 +54,11 @@ mantelhaenzel.test <- function(x){
   names(chi.sq.stat) <- "Chi-Square Test Statistic"
 
   # Calculating p-value from test statistic and chi-squared distribution with 1 degree of freedom
-  p.val <- dchisq(chi.sq.stat, df = 1)/2
+  p.val <- pchisq(chi.sq.stat, df = 1, lower.tail = FALSE)
   names(p.val) <- "p-value"
 
-  # Returning vector of common odds ratio, test statistic, and p-value
+  # Returning list of common odds ratio, test statistic, and p-value
   # All of which are named
-  return(c(common.or, chi.sq.stat, p.val))
+  #return(c(common.or, chi.sq.stat, p.val))
+  return(list(common.or = common.or, chi.sq.stat = chi.sq.stat, p.val = p.val))
 }

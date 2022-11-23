@@ -1,6 +1,6 @@
-#' Conditional Odds Ratios of 2x2 or 2x2xk Table
+#' Conditional Odds Ratios of a 2x2 or 2x2xk Table
 #'
-#' Function to calculate the odds ratio of a single 2x2 table or conditional odds ratios of a 2x2xk table.
+#' Calculates the odds ratio of a single 2x2 table or conditional odds ratios of a 2x2xk table.
 #'
 #' @param x Either a two dimensional 2x2 table or a 3 dimensional 2x2xk table/array of 2x2 tables.
 #'
@@ -17,7 +17,6 @@
 #'              2,7,3,1),
 #'            dim = c(2,2,2))
 #' cond.odds.ratios(b)
-#'
 #' @export
 cond.odds.ratios <- function(x){
 

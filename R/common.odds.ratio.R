@@ -1,18 +1,17 @@
-#' Common Odds Ratio of 2x2xk Table
+#' Common Odds Ratio of a 2x2xk Table
 #'
-#' Function to calculate the common odds ratio of a 2x2xk table.
+#' Calculates the common odds ratio of a 2x2xk table.
 #'
 #' @param x A 3 dimensional 2x2xk table/array of 2x2 tables.
 #'
 #' @return The common odds ratio of the 2x2xk table.
 #'
-#' @example
+#' @examples
 #' a <- array(c(1,3,5,6,
 #'              2,7,3,1,
 #'              2,4,9,2),
 #'            dim = c(2,2,3))
 #' common.odds.ratio(a)
-#'
 #' @export
 common.odds.ratio <- function(x){
 
