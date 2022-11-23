@@ -2,12 +2,21 @@
 #'
 #' Function to calculate the odds ratio of a single 2x2 table or conditional odds ratios of a 2x2xk table.
 #'
-#' @param x Either a two dimensional 2x2 table or a 3 dimensional 2x2xk table/array of 2x2 tables
+#' @param x Either a two dimensional 2x2 table or a 3 dimensional 2x2xk table/array of 2x2 tables.
 #'
-#' @return A scalar of the single odds ratio if a single 2x2 table is passed, or a vector of conditional odds ratios if a 2x2xk table/array of 2x2 tables is passed
+#' @return A scalar of the single odds ratio if a single 2x2 table is passed, or a vector of conditional odds ratios if a 2x2xk table/array of 2x2 tables is passed.
 #'
 #' @examples
+#' ## A single 2x2 table
+#' a <- array(c(1,3,5,6),
+#'            dim = c(2,2))
+#' cond.odds.ratios(a)
 #'
+#' ## A 2x2xk table or array of 2x2 tables
+#' b <- array(c(1,3,5,6,
+#'              2,7,3,1),
+#'            dim = c(2,2,2))
+#' cond.odds.ratios(b)
 #'
 #' @export
 cond.odds.ratios <- function(x){
@@ -44,7 +53,21 @@ cond.odds.ratios <- function(x){
   }
 }
 
-# Function to calculate the common odds ratio of an array of multiple 2x2 tables
+#' Common Odds Ratio of 2x2xk Table
+#'
+#' Function to calculate the common odds ratio of a 2x2xk table.
+#'
+#' @param x A 3 dimensional 2x2xk table/array of 2x2 tables.
+#'
+#' @return The common odds ratio of the 2x2xk table.
+#'
+#' @example
+#' a <- array(c(1,3,5,6,
+#'              2,7,3,1,
+#'              2,4,9,2),
+#'            dim = c(2,2,3))
+#' common.odds.ratio(a)
+#'
 #' @export
 common.odds.ratio <- function(x){
 
@@ -77,6 +100,22 @@ common.odds.ratio <- function(x){
 
 # Function to perform the Cochran–Mantel–Haenszel test on an array of multiple 2x2 tables
 # Returns the common odds ratio (sample estimate), CMH chi-squared test statistic, and associated p-value
+
+#' Cochran–Mantel–Haenszel Chi-Squared Test for 2x2xk Tables.
+#'
+#' Performs the Cochran–Mantel–Haenszel chi-squared test on a 2x2xk table, which tests the null hypothesis that the common odds ratio is 1 and the alternative that it is non-zero.
+#'
+#' @param x A 3 dimensional 2x2xk table/array of 2x2 tables.
+#'
+#' @return A named vector including the common odds ratio, chi-squared statistic, and p-value from the test.
+#'
+#' @example
+#' a <- array(c(1,3,5,6,
+#'              2,7,3,1,
+#'              2,4,9,2),
+#'            dim = c(2,2,3))
+#' mantelhaenzel.test(a)
+#'
 #' @export
 mantelhaenzel.test <- function(x){
 
@@ -114,21 +153,15 @@ mantelhaenzel.test <- function(x){
   common.or <- common.odds.ratio(x)
   names(common.or) <- "Common Odds Ratio"
 
-  # Calcuating test statistic from numerator and denominator calculated iteratively
+  # Calculating test statistic from numerator and denominator calculated iteratively
   chi.sq.stat <- numerator/denominator
   names(chi.sq.stat) <- "Chi-Square Test Statistic"
 
   # Calculating p-value from test statistic and chi-squared distribution with 1 degree of freedom
-  p.val <- dchisq(chi.sq.stat, df = 1)
+  p.val <- dchisq(chi.sq.stat, df = 1)/2
   names(p.val) <- "p-value"
 
   # Returning vector of common odds ratio, test statistic, and p-value
   # All of which are named
   return(c(common.or, chi.sq.stat, p.val))
 }
-
-
-
-
-
-

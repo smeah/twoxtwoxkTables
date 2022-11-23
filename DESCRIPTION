@@ -3,7 +3,7 @@ Title: Measures for Two-By-Two-k Tables
 Version: 0.0.0.9000
 Authors@R: 
     person("Sabir", "Meah", , "smeah@umich.edu", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: Analysis of 2x2xk tables, including conditional odds ratios, common odds ratios, and the Cochran–Mantel–Haenszel test 
 License: GPL-3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
