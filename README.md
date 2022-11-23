@@ -1,6 +1,6 @@
 # twoxtwoxkTables
 
-### R package for analysis of 2x2xk tables.  
+### R package for analysis of 2x2xk tables
 
 Commonly used in epidemiology, 2x2xk tables are a way to express the relationship between a binary independent variable (often an exposure or treatment) and a binary dependent variable (often an outcome or disease).
 This package provides functions that generate common epjdemiological measures for 2x2xk tables.  
