@@ -33,7 +33,7 @@ This package provides functions that generate common epidemiological measures fo
 
 In this vignette, I demonstrate example usage of the functions in this package (more basic details can be found in the help pages of the functions) and provide a comparison to existing functions published on CRAN.
 
-This package is not published to CRAN, but can be installed by running the line `devtools::install_github("smeah/twoxtwoxkTables")` in the R console.  To install with the vignette, run `devtools::install_github("smeah/twoxtwoxkTables", build_vignettes = TRUE)`.
+This package is not published to CRAN, but can be installed by running the line `devtools::install_github("smeah/twoxtwoxkTables")` in the R console.  To install with the vignette, run `devtools::install_github("smeah/twoxtwoxkTables", build_vignettes = TRUE)`. Note that to build the vignette, you may need to download the `samplesizeCMH` and `bench` packages, which are not suggested by the package since they are not a dependency of any of the functions, just the vignette. To view the vignette, run `browseVignettes("twoxtwoxkTables")`.
 
 This package was created by Sabir Meah (smeah@umich.edu) as a part of BIOSTAT-625: Computing with Big Data at the University of Michigan.
 
@@ -148,6 +148,10 @@ mark(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$p.value), as.nu
 ```
 
 `mantelhaenzel.test()` in this package is significantly faster, consistently nearly twice as fast on my machine, than `mantelhaen.test()` in `stats`.  As a note however, speed in this case is very much not free; `mantelhaen.test()` is a much more flexible function with several options for modifications to the test, such as a continuity correction or an alternative data input option of providing each of the three variables as vectors instead of a single 2x2xk table stored as an array (likely a faster option for users to input the data straight from a dataframe instead of generating an array, albeit perhaps less intuitive and friendly to demonstration given that a viewable 2x2xk table would never be created).  `mantelhaenzel.test()` is a faster function to compute the most basic (and often first taught to students) type of Mantel–Haenszel test, but users seeking additional modifications to the test, or just preferring flexibility to speed, would need to use `mantelhaen.test()` instead.
+
+# Conclusion
+
+The `twoxtwoxkTables` package provides faster and more convenient functions to generate measures for the analysis of 2x2xk tables than functions currently in CRAN.  `cond.odds.ratios()` provides a more convenient way to calculate conditional odds ratios from a 2x2xk table, not requiring multiple function calls like the current solution, and is also marginally faster.  `common.odds.ratio()` similarly provides a more convenient way to calculate common odds ratios than current solutions, which require calling a function that is primarily used for another purpose (and thus may be hard to find for the goal of just calculating common odds ratios) and referring to an element in a list provided in the output.  It is also much faster, owing to not having to perform needless computations (when the goal is just computing a common odds ratio) for that other purpose.  `mantelhaenzel.test()` provides a faster way to perform the Cochran–Mantel–Haenszel chi-squared test than the current popular function, although it lacks much of the flexibility of that function.
 
 # References
 
