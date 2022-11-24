@@ -1,5 +1,7 @@
 ---
 title: "twoxtwoxkTables Vignette"
+author: "Sabir Meah"
+date: "November 11, 2022"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{twoxtwoxkTables Vignette}
@@ -16,6 +18,8 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(twoxtwoxkTables)
+library(samplesizeCMH)
+library(bench)
 ```
 
 # Introduction
@@ -23,30 +27,128 @@ library(twoxtwoxkTables)
 Commonly used in epidemiology, 2x2xk tables are a way to express the relationship between a binary independent variable (often an exposure or treatment) and a binary dependent variable (often an outcome or disease).
 This package provides functions that generate common epidemiological measures for 2x2xk tables.  
 
-In this vignette, I demonstrate the usage of the functions in this package and provide a comparison to existing functions published on CRAN.
+In this vignette, I demonstrate example usage of the functions in this package (more basic details can be found in the help pages of the functions) and provide a comparison to existing functions published on CRAN.
 
-This package is not published to CRAN, but can be installed by running the line `devtools::install_github("smeah/twoxtwoxkTables")` in the R console.  To install with the vignette, run ``devtools::install_github("smeah/twoxtwoxkTables", build_vignettes = TRUE)`.
+This package is not published to CRAN, but can be installed by running the line `devtools::install_github("smeah/twoxtwoxkTables")` in the R console.  To install with the vignette, run `devtools::install_github("smeah/twoxtwoxkTables", build_vignettes = TRUE)`.
 
 This package was created by Sabir Meah (smeah@umich.edu) as a part of BIOSTAT-625: Computing with Big Data at the University of Michigan.
 
 Functions:
 
-* cond.odds.ratios() - Conditional Odds Ratios
+* `cond.odds.ratios()` - Conditional Odds Ratios
 
 Calculates the conditional odds ratios for each of the k strata in a 2x2xk table.
 
-* common.odds.ratio() - Common Odds Ratios
+* `common.odds.ratio()` - Common Odds Ratios
 
 Calculates the common odds ratio across all k strata in a 2x2xk table.
 
-* mantelhaenzel.test() - Cochran–Mantel–Haenszel Test
+* `mantelhaenzel.test()` - Cochran–Mantel–Haenszel Test
 
 Performs the Cochran–Mantel–Haenszel chi-squared test (two-sided without continuity correction) on a 2x2xk table.  
 Tests the null hypothesis that the common odds ratio is 1 against the alternative hypothesis that it is not one.
 
-# Usage
+# Examples
 
+To demonstrate the usage of the functions in this package, I use a similar set of examples as used in a demonstration of the Mantel-Haenszel test in the `stats` package, which can be found at https://cran.r-project.org/web/packages/samplesizeCMH/vignettes/samplesizeCMH-introduction.html.  Usage of a similar set of examples allows easy comparison of usage between the functions in this package and previous functions already in CRAN.  One can simply visit this page to view the usage of the CRAN functions, and the usage of the functions in this package will be demonstrated below.  A comparison of speed of the functions in this package and the functions published in CRAN will also be provided in the next section.  
 
+## Data
 
+These examples will be performed with the `Titanic` dataset, which is available in the `datasets` package automatically loaded in base R.  Three variables are of concern for these examples: sex (male or female), survival (no or yes), and class (first class, second class, third class, or crew).  We will construct a 2x2xk table with sex as the independent variable (exposure), survival as the dependent variable (outcome), and class as the stratification factor.  This should be an interesting comparison as the Titanic evacuation famously started with only women and children and also had differences between classes.  Using `margin.table()`, we can get an array of 2x2 tables, each comparing sex and survival within each class.  
+
+```{r}
+data("Titanic")
+partial_tables <- margin.table(Titanic, c(2,4,1))
+partial_tables
+```
+
+## Conditional Odds Ratios
+
+Conditional odds ratios are the odds ratios of the outcome between the two exposure groups for each strata.  In this case, they are the odds ratios of death (negation of survival) between males and females in each class (in each of the above 2x2 tables).  `cond.odds.ratios()` allows us to calculate these odds ratios in one command and returns a vector of odds ratios.  
+
+```{r}
+cond.odds.ratios(partial_tables)
+```
+
+We see that the odds ratios of death for males are about 67.09 in first class, 44.07 in second class, 4.07 in third class, and 23.26 in the crew.
+
+## Common Odds Ratio
+
+Not to be confused with the marginal odds ratio, which simply is the odds ratio of the 2x2 table produced by collapsing all of the strata, the common odds ratio is the weighted (by size of strata) average of the conditional odds ratios of each strata; a sort of an intermediary between conditional and marginal odds ratio.  The common odds ratio serves as a measure of assocation of the treatment and outcome while taking into account stratification.  It is the quantity that is tested in the Cochran–Mantel–Haenszel test, which this package also has a function for (demonstrated below).  `common.odds.ratio()` calculates the common odds ratio and returns the result as a single scalar.
+
+```{r}
+common.odds.ratio(partial_tables)
+```
+
+## Mantel–Haenszel Test
+
+The Cochran–Mantel–Haenszel test, usually referred to as just the Mantel–Haenszel test, tests the null hypothesis that the common odds ratio of a 2x2xk table is 1, against the alternative hypothesis that the common odds ratio is not one.  In other words, it tests if there is an association between two binary variables, while taking into account stratification over a third categorical variable.  The test statistic from this test follows a chi-squared distribution with 1 degree of freedom, regardless of the number of strata.  `mantelhaenzel.test()` performs the Mantel-Haenszel test and returns a list of the common odds ratio (equivalent to what would be calculated by the `common.odds.ratio()` function in this package above), chi-squared test statistic, and p-value from the test.  
+
+```{r}
+mantelhaenzel.test(partial_tables)
+```
+
+Individual measures reported in the output can be accessed using the `$` operator.
+
+```{r}
+res <- mantelhaenzel.test(partial_tables)
+
+# Common Odds Ratio
+res$common.or
+
+# Chi-Squared Test Statistic
+res$chi.sq.stat
+
+# p-value
+res$p.val
+```
+
+The p-value being lower than any reasonable $\alpha$ level can lead us to reject the null hypothesis and conclude that the common odds ratio is different than one, or in other words, that there is a statistically significant association between sex and survival/death on the Titanic, taking boarding class into account.
+
+# Comparison with CRAN Functions
+
+In this section, I show equivalence and compare the usage and speed of the functions in this package to the already existing functions in CRAN using the examples in the previous section.
+
+## Conditional Odds Ratios
+
+I am not aware of a function in CRAN that calculates conditional odds ratios for a 2x2xk table.  The current solution with CRAN functions would be to apply the `odds.ratio()` function in the `samplesizeCMH` package across each k element of the array representing the 2x2xk table.  If this is indeed the best current solution, this package offers an advantage in convenience and usability by being able to do this in one simple function call.  I demonstrate the correctness and speed of `cond.odds.ratios()` compared to this current standard below:
+
+```{r}
+all.equal(as.numeric(apply(partial_tables, 3, odds.ratio)), cond.odds.ratios(partial_tables))
+mark(as.numeric(apply(partial_tables, 3, odds.ratio)), cond.odds.ratios(partial_tables))
+```
+
+`cond.odds.ratios()` gives the same result as the current standard, and it also seems to consistently run faster by a tiny amount (the median on my machine is consistently about 1 microsecond, or less than 2%, faster, despite also consistently incurring more garbage collector calls).
+
+## Common Odds Ratio
+
+I am also not aware of any function in CRAN that only calculates common odds ratios; it is part of the output of `mantelhaen.test()` in the `stats` package, but this means that an entire Mantel–Haenszel test must be run to get just the common odds ratio.  This package offers additional convenience and speed benefits by allowing the calculation of only common odds ratios in a single function that just returns a scalar (not a list that includes the common odds ratio like `mantelhaen.test()`).  Equivalence in results and speed benefits to `mantelhaen.test()` are shown below.
+
+```{r}
+all.equal(as.numeric(mantelhaen.test(partial_tables)$estimate), common.odds.ratio(partial_tables))
+mark(as.numeric(mantelhaen.test(partial_tables)$estimate), common.odds.ratio(partial_tables))
+```
+
+Likely owing to the fact it only calculates the common odds ratio and doesn't force computation of the full Mantel-Haenszel test, the function in this package calculates the common odds ratio much faster (about 4 times as fast on my machine).
+
+## Mantel–Haenszel Test
+
+`mantelhaen.test` in the `stats` package is the current most widely used function for performing Mantel-Haenszel tests, and provides several more input arguments that can be optionally specified, in addition to more returned quantities as well.  It is also worth noting that it performs a continuity correction by default, while `mantelhaenzel.test()` does not (and does not provide it as an option).  A demonstration of equivalence within margin of all return elements (given by `mantelhaenzel.test()`) and comparison in speed between `mantelhaen.test()` in `stats` and `mantelhaenzel.test()` in this package is provided below.
+
+```{r}
+all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$estimate), as.numeric(mantelhaenzel.test(partial_tables)$common.or))
+all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$statistic), as.numeric(mantelhaenzel.test(partial_tables)$chi.sq.stat), tolerance = 0.01)
+all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$p.value), as.numeric(mantelhaenzel.test(partial_tables)$p.val))
+
+mark(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$p.value), as.numeric(mantelhaenzel.test(partial_tables)$p.val))
+```
+
+`mantelhaenzel.test()` in this package is significantly faster, consistently nearly twice as fast on my machine, than `mantelhaen.test()` in `stats`.  As a note however, speed in this case is very much not free; `mantelhaen.test()` is a much more flexible function with several options for modifications to the test, such as a continuity correction or an alternative data input option of providing each of the three variables as vectors instead of a single 2x2xk table stored as an array (likely a faster option for users to input the data straight from a dataframe instead of generating an array, albeit perhaps less intuitive and friendly to demonstration given that a viewable 2x2xk table would never be created).  `mantelhaenzel.test()` is a faster function to compute the most basic (and often first taught to students) type of Mantel–Haenszel test, but users seeking additional modifications to the test, or just preferring flexibility to speed, would need to use `mantelhaen.test()` instead.
+
+# References
+
+Egeler, P. W. (2017, December 21). Introduction to the Cochran-Mantel-Haenszel Test. *The Comprehensive R Archive Network*. Retrieved November 22, 2022, from https://cran.r-project.org/web/packages/samplesizeCMH/vignettes/samplesizeCMH-introduction.html
+
+Wikipedia contributors. (2022, April 18). Cochran–Mantel–Haenszel statistics. In *Wikipedia, The Free Encyclopedia*. Retrieved November 24, 2022, from https://en.wikipedia.org/w/index.php?title=Cochran%E2%80%93Mantel%E2%80%93Haenszel_statistics&oldid=1083417654
 
 

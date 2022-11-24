@@ -51,7 +51,7 @@ mantelhaenzel.test <- function(x){
 
   # Calculating test statistic from numerator and denominator calculated iteratively
   chi.sq.stat <- numerator/denominator
-  names(chi.sq.stat) <- "Chi-Square Test Statistic"
+  names(chi.sq.stat) <- "Chi-Squared Test Statistic"
 
   # Calculating p-value from test statistic and chi-squared distribution with 1 degree of freedom
   p.val <- pchisq(chi.sq.stat, df = 1, lower.tail = FALSE)
