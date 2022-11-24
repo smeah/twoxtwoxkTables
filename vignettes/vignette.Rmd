@@ -21,7 +21,8 @@ library(twoxtwoxkTables)
 
 # Libraries for comparison functions
 ## NOTE: YOU MAY NEED TO INSTALL THESE PACKAGES TO BUILD THE VIGNETTE
-## THEY ARE NOT AUTOMATICALLY SUGGESTED BY THE PACKAGE AS THEY ARE ONLY USED FOR THE VIGNETTE
+## THEY ARE NOT AUTOMATICALLY SUGGESTED BY THE PACKAGE
+## AS THEY ARE ONLY USED FOR THE VIGNETTE
 library(samplesizeCMH)
 library(bench)
 ```
@@ -118,8 +119,10 @@ In this section, I show equivalence and compare the usage and speed of the funct
 I am not aware of a function in CRAN that calculates conditional odds ratios for a 2x2xk table.  The current solution with CRAN functions would be to apply the `odds.ratio()` function in the `samplesizeCMH` package across each k element of the array representing the 2x2xk table.  If this is indeed the best current solution, this package offers an advantage in convenience and usability by being able to do this in one simple function call.  I demonstrate the correctness and speed of `cond.odds.ratios()` compared to this current standard below:
 
 ```{r}
-all.equal(as.numeric(apply(partial_tables, 3, odds.ratio)), cond.odds.ratios(partial_tables))
-mark(as.numeric(apply(partial_tables, 3, odds.ratio)), cond.odds.ratios(partial_tables))
+all.equal(as.numeric(apply(partial_tables, 3, odds.ratio)), 
+          cond.odds.ratios(partial_tables))
+mark(as.numeric(apply(partial_tables, 3, odds.ratio)), 
+     cond.odds.ratios(partial_tables))
 ```
 
 `cond.odds.ratios()` gives the same result as the current standard, and it also seems to consistently run faster by a tiny amount (the median on my machine is consistently about 1 microsecond, or less than 2%, faster, despite also consistently incurring more garbage collector calls).
@@ -129,8 +132,10 @@ mark(as.numeric(apply(partial_tables, 3, odds.ratio)), cond.odds.ratios(partial_
 I am also not aware of any function in CRAN that only calculates common odds ratios; it is part of the output of `mantelhaen.test()` in the `stats` package, but this means that an entire Mantel–Haenszel test must be run to get just the common odds ratio.  This package offers additional convenience and speed benefits by allowing the calculation of only common odds ratios in a single function that just returns a scalar (not a list that includes the common odds ratio like `mantelhaen.test()`).  Equivalence in results and speed benefits to `mantelhaen.test()` are shown below.
 
 ```{r}
-all.equal(as.numeric(mantelhaen.test(partial_tables)$estimate), common.odds.ratio(partial_tables))
-mark(as.numeric(mantelhaen.test(partial_tables)$estimate), common.odds.ratio(partial_tables))
+all.equal(as.numeric(mantelhaen.test(partial_tables)$estimate), 
+          common.odds.ratio(partial_tables))
+mark(as.numeric(mantelhaen.test(partial_tables)$estimate), 
+     common.odds.ratio(partial_tables))
 ```
 
 Likely owing to the fact it only calculates the common odds ratio and doesn't force computation of the full Mantel-Haenszel test, the function in this package calculates the common odds ratio much faster (about 4 times as fast on my machine).
@@ -140,11 +145,15 @@ Likely owing to the fact it only calculates the common odds ratio and doesn't fo
 `mantelhaen.test()` in the `stats` package is the current most widely used function for performing Mantel-Haenszel tests, and provides several more input arguments that can be optionally specified, in addition to more returned quantities as well.  It is also worth noting that it performs a continuity correction by default, while `mantelhaenzel.test()` does not (and does not provide it as an option).  A demonstration of equivalence within margin of all return elements (given by `mantelhaenzel.test()`) and comparison in speed between `mantelhaen.test()` in `stats` and `mantelhaenzel.test()` in this package is provided below.
 
 ```{r}
-all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$estimate), as.numeric(mantelhaenzel.test(partial_tables)$common.or))
-all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$statistic), as.numeric(mantelhaenzel.test(partial_tables)$chi.sq.stat), tolerance = 0.01)
-all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$p.value), as.numeric(mantelhaenzel.test(partial_tables)$p.val))
+all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$estimate), 
+          as.numeric(mantelhaenzel.test(partial_tables)$common.or))
+all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$statistic), 
+          as.numeric(mantelhaenzel.test(partial_tables)$chi.sq.stat), tolerance = 0.01)
+all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$p.value), 
+          as.numeric(mantelhaenzel.test(partial_tables)$p.val))
 
-mark(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$p.value), as.numeric(mantelhaenzel.test(partial_tables)$p.val))
+mark(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$p.value), 
+     as.numeric(mantelhaenzel.test(partial_tables)$p.val))
 ```
 
 `mantelhaenzel.test()` in this package is significantly faster, consistently nearly twice as fast on my machine, than `mantelhaen.test()` in `stats`.  As a note however, speed in this case is very much not free; `mantelhaen.test()` is a much more flexible function with several options for modifications to the test, such as a continuity correction or an alternative data input option of providing each of the three variables as vectors instead of a single 2x2xk table stored as an array (likely a faster option for users to input the data straight from a dataframe instead of generating an array, albeit perhaps less intuitive and friendly to demonstration given that a viewable 2x2xk table would never be created).  `mantelhaenzel.test()` is a faster function to compute the most basic (and often first taught to students) type of Mantel–Haenszel test, but users seeking additional modifications to the test, or just preferring flexibility to speed, would need to use `mantelhaen.test()` instead.
