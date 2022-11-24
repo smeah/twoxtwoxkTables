@@ -18,6 +18,10 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(twoxtwoxkTables)
+
+# Libraries for comparison functions
+## NOTE: YOU MAY NEED TO INSTALL THESE PACKAGES TO BUILD THE VIGNETTE
+## THEY ARE NOT AUTOMATICALLY SUGGESTED BY THE PACKAGE AS THEY ARE ONLY USED FOR THE VIGNETTE
 library(samplesizeCMH)
 library(bench)
 ```
