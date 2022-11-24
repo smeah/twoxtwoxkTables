@@ -137,7 +137,7 @@ Likely owing to the fact it only calculates the common odds ratio and doesn't fo
 
 ## Mantel–Haenszel Test
 
-`mantelhaen.test` in the `stats` package is the current most widely used function for performing Mantel-Haenszel tests, and provides several more input arguments that can be optionally specified, in addition to more returned quantities as well.  It is also worth noting that it performs a continuity correction by default, while `mantelhaenzel.test()` does not (and does not provide it as an option).  A demonstration of equivalence within margin of all return elements (given by `mantelhaenzel.test()`) and comparison in speed between `mantelhaen.test()` in `stats` and `mantelhaenzel.test()` in this package is provided below.
+`mantelhaen.test()` in the `stats` package is the current most widely used function for performing Mantel-Haenszel tests, and provides several more input arguments that can be optionally specified, in addition to more returned quantities as well.  It is also worth noting that it performs a continuity correction by default, while `mantelhaenzel.test()` does not (and does not provide it as an option).  A demonstration of equivalence within margin of all return elements (given by `mantelhaenzel.test()`) and comparison in speed between `mantelhaen.test()` in `stats` and `mantelhaenzel.test()` in this package is provided below.
 
 ```{r}
 all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$estimate), as.numeric(mantelhaenzel.test(partial_tables)$common.or))
