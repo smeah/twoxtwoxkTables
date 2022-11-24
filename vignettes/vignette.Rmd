@@ -1,7 +1,7 @@
 ---
 title: "twoxtwoxkTables Vignette"
-author: "Sabir Meah"
-date: "November 11, 2022"
+author: "Sabir Meah (smeah@umich.edu)"
+date: "Last Modified November 23, 2022"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{twoxtwoxkTables Vignette}
@@ -20,9 +20,8 @@ knitr::opts_chunk$set(
 library(twoxtwoxkTables)
 
 # Libraries for comparison functions
-## NOTE: YOU MAY NEED TO INSTALL THESE PACKAGES TO BUILD THE VIGNETTE
-## THEY ARE NOT AUTOMATICALLY SUGGESTED BY THE PACKAGE
-## AS THEY ARE ONLY USED FOR THE VIGNETTE
+## NOTE: You may need to install these packages to build the vignette
+## They are only needed for the vignette, not any of the functions themselves
 library(samplesizeCMH)
 library(bench)
 ```
@@ -34,7 +33,7 @@ This package provides functions that generate common epidemiological measures fo
 
 In this vignette, I demonstrate example usage of the functions in this package (more basic details can be found in the help pages of the functions) and provide a comparison to existing functions published on CRAN.
 
-This package is not published to CRAN, but can be installed by running the line `devtools::install_github("smeah/twoxtwoxkTables")` in the R console.  To install with the vignette, run `devtools::install_github("smeah/twoxtwoxkTables", build_vignettes = TRUE)`. Note that to build the vignette, you may need to download the `samplesizeCMH` and `bench` packages, which are not suggested by the package since they are not a dependency of any of the functions, just the vignette. To view the vignette, run `browseVignettes("twoxtwoxkTables")`.
+This package is not published to CRAN, but can be installed by running the line `devtools::install_github("smeah/twoxtwoxkTables")` in the R console.  To install with the vignette, run `devtools::install_github("smeah/twoxtwoxkTables", build_vignettes = TRUE)`. To view the vignette, run `browseVignettes("twoxtwoxkTables")`.
 
 This package was created by Sabir Meah (smeah@umich.edu) as a part of BIOSTAT-625: Computing with Big Data at the University of Michigan.
 
@@ -148,7 +147,7 @@ Likely owing to the fact it only calculates the common odds ratio and doesn't fo
 all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$estimate), 
           as.numeric(mantelhaenzel.test(partial_tables)$common.or))
 all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$statistic), 
-          as.numeric(mantelhaenzel.test(partial_tables)$chi.sq.stat), tolerance = 0.01)
+          as.numeric(mantelhaenzel.test(partial_tables)$chi.sq.stat))
 all.equal(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$p.value), 
           as.numeric(mantelhaenzel.test(partial_tables)$p.val))
 
