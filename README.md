@@ -26,4 +26,4 @@ Calculates the common odds ratio across all k strata in a 2x2xk table.
 * `mantelhaenzel.test()` - Cochran–Mantel–Haenszel Test
 
 Performs the Cochran–Mantel–Haenszel chi-squared test (two-sided without continuity correction) on a 2x2xk table.  
-Tests the null hypothesis that the common odds ratio is 1 against the alternative hypothesis that it is not one.
+Tests the null hypothesis that the common odds ratio is 1 against the alternative hypothesis that it is not 1.
