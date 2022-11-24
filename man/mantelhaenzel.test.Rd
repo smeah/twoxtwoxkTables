@@ -2,7 +2,7 @@
 % Please edit documentation in R/mantelhaenzel.test.R
 \name{mantelhaenzel.test}
 \alias{mantelhaenzel.test}
-\title{Cochran–Mantel–Haenszel Chi-Squared Test for a 2x2xk Table.}
+\title{Cochran–Mantel–Haenszel Chi-Squared Test for a 2x2xk Table}
 \usage{
 mantelhaenzel.test(x)
 }

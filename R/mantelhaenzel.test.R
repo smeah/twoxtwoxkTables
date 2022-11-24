@@ -1,4 +1,4 @@
-#' Cochran–Mantel–Haenszel Chi-Squared Test for a 2x2xk Table.
+#' Cochran–Mantel–Haenszel Chi-Squared Test for a 2x2xk Table
 #'
 #' Performs the Cochran–Mantel–Haenszel chi-squared test without a continuity correction on a 2x2xk table, testing the null hypothesis that the common odds ratio is 1 and the alternative that it is non-zero.
 #'
