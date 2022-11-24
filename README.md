@@ -9,7 +9,7 @@ A comparison in usage, convenience, and speed to existing functions published on
 
 This package is not published to CRAN, but can be installed by running the line `devtools::install_github("smeah/twoxtwoxkTables")` in the R console.  
 
-To install with the vignette, run `devtools::install_github("smeah/twoxtwoxkTables", build_vignettes = TRUE)`.  Note that to build the vignette, you may need to download the `samplesizeCMH` and `bench` packages, which are not suggested by the package since they are not a dependency of any of the functions, just the vignette.  To view the vignette, run `browseVignettes("twoxtwoxkTables")`.
+To install with the vignette, run `devtools::install_github("smeah/twoxtwoxkTables", build_vignettes = TRUE)`.  To view the vignette, run `browseVignettes("twoxtwoxkTables")`.
 
 This package was created by Sabir Meah (smeah@umich.edu) as a part of BIOSTAT-625: Computing with Big Data at the University of Michigan.
 
