@@ -3,7 +3,7 @@
 ### R package for analysis of 2x2xk tables
 
 Commonly used in epidemiology, 2x2xk tables are a way to express the relationship between a binary independent variable (often an exposure or treatment) and a binary dependent variable (often an outcome or disease).
-This package provides functions that generate common epidemiological measures for 2x2xk tables.  
+This package provides functions that generate common epidemiological measures for 2x2xk tables.  These functions are in many cases more conveinent and faster than current methods to calcuate these measures using functions in CRAN.
 
 A comparison in usage, convenience, and speed to existing functions published on CRAN is provided in the package's vignette.
 
