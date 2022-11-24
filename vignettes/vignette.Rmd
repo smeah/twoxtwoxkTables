@@ -125,7 +125,7 @@ mark(as.numeric(apply(partial_tables, 3, odds.ratio)),
      cond.odds.ratios(partial_tables))
 ```
 
-`cond.odds.ratios()` gives the same result as the current standard, and it also seems to consistently run faster by a tiny amount (the median on my machine is consistently about 1 microsecond, or less than 2%, faster, despite also consistently incurring more garbage collector calls).
+`cond.odds.ratios()` gives the same result as the current standard, and speed seems to be approximately the same; I observed either function being faster depending on the run.
 
 ## Common Odds Ratio
 
@@ -160,7 +160,7 @@ mark(as.numeric(mantelhaen.test(partial_tables, correct = FALSE)$p.value),
 
 # Conclusion
 
-The `twoxtwoxkTables` package provides faster and more convenient functions to generate measures for the analysis of 2x2xk tables than functions currently in CRAN.  `cond.odds.ratios()` provides a more convenient way to calculate conditional odds ratios from a 2x2xk table, not requiring multiple function calls like the current solution, and is also marginally faster.  `common.odds.ratio()` similarly provides a more convenient way to calculate common odds ratios than current solutions, which require calling a function that is primarily used for another purpose (and thus may be hard to find for the goal of just calculating common odds ratios) and referring to an element in a list provided in the output.  It is also much faster, owing to not having to perform needless computations (when the goal is just computing a common odds ratio) for that other purpose.  `mantelhaenzel.test()` provides a faster way to perform the Cochran–Mantel–Haenszel chi-squared test than the current popular function, although it lacks much of the flexibility of that function.
+The `twoxtwoxkTables` package provides faster and more convenient functions to generate measures for the analysis of 2x2xk tables than functions currently in CRAN.  `cond.odds.ratios()` provides a more convenient way to calculate conditional odds ratios from a 2x2xk table, not requiring multiple function calls like the current solution.  `common.odds.ratio()` similarly provides a more convenient way to calculate common odds ratios than current solutions, which require calling a function that is primarily used for another purpose (and thus may be hard to find for the goal of just calculating common odds ratios) and referring to an element in a list provided in the output.  It is also much faster, owing to not having to perform needless computations (when the goal is just computing a common odds ratio) for that other purpose.  `mantelhaenzel.test()` provides a faster way to perform the Cochran–Mantel–Haenszel chi-squared test than the current popular function, although it lacks much of the flexibility of that function.
 
 # References
 
