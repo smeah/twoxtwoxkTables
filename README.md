@@ -11,9 +11,9 @@ This package provides functions that generate common epidemiological measures fo
 
 A comparison in usage, convenience, and speed to existing functions published on CRAN is provided in the package's vignette.
 
-This package is not published to CRAN, but can be installed by running the line `devtools::install_github("smeah/twoxtwoxkTables")` in the R console.  
+This package is not published to CRAN, but can be installed (without the vignette included) by running the line `devtools::install_github("smeah/twoxtwoxkTables")` in the R console.  
 
-To install with the vignette, run `devtools::install_github("smeah/twoxtwoxkTables", build_vignettes = TRUE)`.  To view the vignette, run `browseVignettes("twoxtwoxkTables")`.
+To install the package with the vignette included, run `devtools::install_github("smeah/twoxtwoxkTables", build_vignettes = TRUE)`.  **Note that to build the vignette, you will need to download the `samplesizeCMH` and `bench` packages if you have not already.**  To view the vignette, run `browseVignettes("twoxtwoxkTables")`.
 
 This package was created by Sabir Meah (smeah@umich.edu) as a part of BIOSTAT-625: Computing with Big Data at the University of Michigan.
 
