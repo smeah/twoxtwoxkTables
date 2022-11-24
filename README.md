@@ -1,5 +1,9 @@
 # twoxtwoxkTables
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/smeah/twoxtwoxkTables/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/smeah/twoxtwoxkTables/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 ### R package for analysis of 2x2xk tables
 
 Commonly used in epidemiology, 2x2xk tables are a way to express the relationship between a binary independent variable (often an exposure or treatment) and a binary dependent variable (often an outcome or disease).
